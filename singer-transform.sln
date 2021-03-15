@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30804.86
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "singer-transform", "singer-transform\singer-transform.csproj", "{3ADA60A4-21FC-418B-8A38-A1DA1E0C33D9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "singer-transform-tests", "singer-transform-tests\singer-transform-tests.csproj", "{974277B2-027A-4D9C-8EAA-1357A8B061D1}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3ADA60A4-21FC-418B-8A38-A1DA1E0C33D9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3ADA60A4-21FC-418B-8A38-A1DA1E0C33D9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3ADA60A4-21FC-418B-8A38-A1DA1E0C33D9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3ADA60A4-21FC-418B-8A38-A1DA1E0C33D9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{974277B2-027A-4D9C-8EAA-1357A8B061D1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{974277B2-027A-4D9C-8EAA-1357A8B061D1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{974277B2-027A-4D9C-8EAA-1357A8B061D1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{974277B2-027A-4D9C-8EAA-1357A8B061D1}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {EBB03E5D-5BA3-4623-A949-0EB317596D83}
+	EndGlobalSection
+EndGlobal
