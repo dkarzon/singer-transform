@@ -15,7 +15,7 @@ namespace SingerTransform.Tests
         [TestMethod]
         public void ConfigParseTest()
         {
-            var configJson = "{\"transforms\": [{\"stream\": \"ga_acquisition\",\"transformType\": \"AddStaticField\",\"transformValue\": \"##SITE##\",\"transformField\": \"ga_site\",\"transformFieldType\": \"string\"}]}";
+            var configJson = "{\"transforms\": [{\"stream\": \"ga_acquisition\",\"transformType\": \"AddStaticField\",\"value\": \"##SITE##\",\"field\": \"ga_site\",\"fieldType\": \"string\"}]}";
 
             var config = JsonConvert.DeserializeObject<Config>(configJson);
 
