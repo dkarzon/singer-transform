@@ -21,6 +21,11 @@ It reads incoming messages from STDIN and using config.json to transform incomin
             "field": "ga_site",
             "fieldType": "string",
             "keyProperty": true
+        },
+        {
+            "stream": "junkuserstablename",
+            "transformType": "RenameStream",
+            "value": "users_table"
         }
     ]
 }
@@ -37,6 +42,7 @@ The transformation configuration contains a list of transforms with the followin
 
 ## Supported Transforms
 - `AddStaticField` - A transform to add a new field to the output with a static value.
+- `RenameStream` - Renames a given stream (useful for renaming database tables between tap and target)
 
 
 ## //TODO

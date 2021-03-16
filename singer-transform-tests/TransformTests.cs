@@ -71,5 +71,52 @@ namespace SingerTransform.Tests
             Assert.IsNotNull(usersRecordOutput.Record["new_key"]);
             Assert.AreEqual("TEST2", (string)usersRecordOutput.Record["new_key"]);
         }
+
+
+        private static Config ConfigFor_RenameStream()
+        {
+            return new Config
+            {
+                Transforms = new List<TransformConfig>
+                {
+                    new TransformConfig
+                    {
+                        Stream = "junkuserstablename",
+                        TransformType = TransformType.RenameStream,
+                        TransformValue = "users_table"
+                    }
+                }
+            };
+        }
+
+        [TestMethod]
+        public void RenameStream_Schema()
+        {
+            var config = ConfigFor_RenameStream();
+
+            var service = new TransformService(config);
+
+            var usersSchemaInput = SingerOutput.FromJson("{\"type\": \"SCHEMA\", \"stream\": \"junkuserstablename\", \"key_properties\": [\"id\"], \"schema\": {\"required\": [\"id\"], \"type\": [\"object\"], \"properties\": {\"id\": {\"type\": [\"integer\"]}}}}");
+            var usersSchemaOutput = service.Transform(usersSchemaInput);
+
+            // Make sure the output stream has the new name
+            Assert.IsNotNull(usersSchemaOutput.Stream);
+            Assert.AreEqual("users_table", usersSchemaOutput.Stream);
+        }
+
+        [TestMethod]
+        public void RenameStream_Record()
+        {
+            var config = ConfigFor_RenameStream();
+
+            var service = new TransformService(config);
+
+            var usersRecordInput = SingerOutput.FromJson("{\"type\": \"RECORD\", \"stream\": \"junkuserstablename\", \"record\": {\"id\": 1, \"name\": \"Chris\"}}");
+            var usersRecordOutput = service.Transform(usersRecordInput);
+
+            // Make sure the output stream has the new name
+            Assert.IsNotNull(usersRecordOutput.Stream);
+            Assert.AreEqual("users_table", usersRecordOutput.Stream);
+        }
     }
 }

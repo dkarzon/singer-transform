@@ -11,6 +11,10 @@ namespace SingerTransform.Models
         /// <summary>
         /// Adds a new static field to the output
         /// </summary>
-        AddStaticField
+        AddStaticField,
+        /// <summary>
+        /// Renames a given stream (useful for renaming database tables between tap and target)
+        /// </summary>
+        RenameStream
     }
 }

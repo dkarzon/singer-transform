@@ -47,6 +47,9 @@ namespace SingerTransform
                     case TransformType.AddStaticField:
                         AddNewPropertyToSchema(input, transform);
                         break;
+                    case TransformType.RenameStream:
+                        RenameStream(input, transform);
+                        break;
                 }
             }
 
@@ -72,6 +75,11 @@ namespace SingerTransform
             }
         }
 
+        private void RenameStream(SingerOutput input, TransformConfig transform)
+        {
+            input.Stream = transform.TransformValue;
+        }
+
         private SingerOutput HandleRecord(SingerOutput input)
         {
             var streamTransforms = _config.Transforms.Where(c => c.Stream == input.Stream);
@@ -86,6 +94,9 @@ namespace SingerTransform
                 {
                     case TransformType.AddStaticField:
                         AddStaticPropertyToRecord(input, transform);
+                        break;
+                    case TransformType.RenameStream:
+                        RenameStream(input, transform);
                         break;
                 }
             }
