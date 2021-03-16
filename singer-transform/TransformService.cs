@@ -18,22 +18,6 @@ namespace SingerTransform
 
         public SingerOutput Transform(SingerOutput input)
         {
-            if (input.Type == SingerOutputType.SCHEMA)
-            {
-                return HandleSchema(input);
-            }
-
-            if (input.Type == SingerOutputType.RECORD)
-            {
-                return HandleRecord(input);
-            }
-
-            //Unsupported type, do nothing
-            return input;
-        }
-
-        private SingerOutput HandleSchema(SingerOutput input)
-        {
             var streamTransforms = _config.Transforms.Where(c => c.Stream == input.Stream);
             if (!streamTransforms.Any())
             {
@@ -45,10 +29,10 @@ namespace SingerTransform
                 switch (transform.TransformType)
                 {
                     case TransformType.AddStaticField:
-                        AddNewPropertyToSchema(input, transform);
+                        HandleAddStaticField(input, transform);
                         break;
                     case TransformType.RenameStream:
-                        RenameStream(input, transform);
+                        HandleRenameStream(input, transform);
                         break;
                 }
             }
@@ -56,60 +40,40 @@ namespace SingerTransform
             return input;
         }
 
-        private void AddNewPropertyToSchema(SingerOutput input, TransformConfig transform)
+        private void HandleAddStaticField(SingerOutput input, TransformConfig transform)
         {
-            if (input.Schema.Properties.ContainsKey(transform.TransformField))
-                return;
-
-            input.Schema.Properties.Add(transform.TransformField, new SingerSchemaProperty
+            if (input.Type == SingerOutputType.SCHEMA)
             {
-                Type = new List<string>
+                if (input.Schema.Properties.ContainsKey(transform.TransformField))
+                    return;
+
+                input.Schema.Properties.Add(transform.TransformField, new SingerSchemaProperty
+                {
+                    Type = new List<string>
                 {
                     transform.TransformFieldType
                 }
-            });
+                });
 
-            if (transform.KeyProperty)
-            {
-                input.KeyProperties.Add(transform.TransformField);
-            }
-        }
-
-        private void RenameStream(SingerOutput input, TransformConfig transform)
-        {
-            input.Stream = transform.TransformValue;
-        }
-
-        private SingerOutput HandleRecord(SingerOutput input)
-        {
-            var streamTransforms = _config.Transforms.Where(c => c.Stream == input.Stream);
-            if (!streamTransforms.Any())
-            {
-                return input;
-            }
-
-            foreach (var transform in streamTransforms)
-            {
-                switch (transform.TransformType)
+                if (transform.KeyProperty)
                 {
-                    case TransformType.AddStaticField:
-                        AddStaticPropertyToRecord(input, transform);
-                        break;
-                    case TransformType.RenameStream:
-                        RenameStream(input, transform);
-                        break;
+                    input.KeyProperties.Add(transform.TransformField);
                 }
             }
+            else if (input.Type == SingerOutputType.RECORD)
+            {
+                if (input.Record.ContainsKey(transform.TransformField))
+                    return;
 
-            return input;
+                input.Record.Add(transform.TransformField, transform.TransformValue);
+            }
         }
 
-        private void AddStaticPropertyToRecord(SingerOutput input, TransformConfig transform)
+        private void HandleRenameStream(SingerOutput input, TransformConfig transform)
         {
-            if (input.Record.ContainsKey(transform.TransformField))
-                return;
+            // This transform applies to all input types
 
-            input.Record.Add(transform.TransformField, transform.TransformValue);
+            input.Stream = transform.TransformValue;
         }
     }
 }

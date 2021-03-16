@@ -102,6 +102,13 @@ namespace SingerTransform.Tests
             // Make sure the output stream has the new name
             Assert.IsNotNull(usersSchemaOutput.Stream);
             Assert.AreEqual("users_table", usersSchemaOutput.Stream);
+
+            var usersSchemaInput2 = SingerOutput.FromJson("{\"type\": \"SCHEMA\", \"stream\": \"notforrename\", \"key_properties\": [\"id\"], \"schema\": {\"required\": [\"id\"], \"type\": [\"object\"], \"properties\": {\"id\": {\"type\": [\"integer\"]}}}}");
+            var usersSchemaOutput2 = service.Transform(usersSchemaInput2);
+
+            // Make sure the output stream has the old name
+            Assert.IsNotNull(usersSchemaOutput2.Stream);
+            Assert.AreEqual("notforrename", usersSchemaOutput2.Stream);
         }
 
         [TestMethod]
@@ -117,6 +124,13 @@ namespace SingerTransform.Tests
             // Make sure the output stream has the new name
             Assert.IsNotNull(usersRecordOutput.Stream);
             Assert.AreEqual("users_table", usersRecordOutput.Stream);
+
+            var usersRecordInput2 = SingerOutput.FromJson("{\"type\": \"RECORD\", \"stream\": \"notforrename\", \"record\": {\"id\": 1, \"name\": \"Chris\"}}");
+            var usersRecordOutput2 = service.Transform(usersRecordInput2);
+
+            // Make sure the output stream has the old name
+            Assert.IsNotNull(usersRecordOutput2.Stream);
+            Assert.AreEqual("notforrename", usersRecordOutput2.Stream);
         }
     }
 }

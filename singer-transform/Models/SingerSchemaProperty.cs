@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using SingerTransform.Converters;
 using System;
 using System.Collections.Generic;
@@ -16,5 +17,8 @@ namespace SingerTransform.Models
 
         [JsonProperty("format", NullValueHandling=NullValueHandling.Ignore)]
         public string Format { get; set; }
+
+        [JsonExtensionData]
+        public Dictionary<string, JToken> Children { get; set; }
     }
 }

@@ -20,5 +20,8 @@ namespace SingerTransform.Models
 
         [JsonProperty("required", NullValueHandling = NullValueHandling.Ignore)]
         public List<string> Required { get; set; }
+
+        [JsonExtensionData]
+        public Dictionary<string, JToken> Children { get; set; }
     }
 }
