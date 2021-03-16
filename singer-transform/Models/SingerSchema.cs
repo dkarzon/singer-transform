@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using SingerTransform.Converters;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +12,7 @@ namespace SingerTransform.Models
     public class SingerSchema
     {
         [JsonProperty("type")]
+        [JsonConverter(typeof(SingleOrArrayConverter<string>))]
         public List<string> Type { get; set; }
 
         [JsonProperty("properties")]
