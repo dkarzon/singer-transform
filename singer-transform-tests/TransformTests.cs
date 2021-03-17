@@ -1,3 +1,4 @@
+using HashidsNet;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SingerTransform;
 using SingerTransform.Models;
@@ -131,6 +132,70 @@ namespace SingerTransform.Tests
             // Make sure the output stream has the old name
             Assert.IsNotNull(usersRecordOutput2.Stream);
             Assert.AreEqual("notforrename", usersRecordOutput2.Stream);
+        }
+
+
+        private static Config ConfigFor_AddHashId()
+        {
+            return new Config
+            {
+                Transforms = new List<TransformConfig>
+                {
+                    new TransformConfig
+                    {
+                        Stream = "teststream",
+                        TransformType = TransformType.AddHashId,
+                        TransformValue = "id",
+                        TransformField = "hashid",
+                        TransformFieldType = "string",
+                        Properties = new Dictionary<string, string>
+                        {
+                            { "salt", "salt" },
+                            { "minHashLength", "5" },
+                            { "alphabet", "abcdefghijklmnopqrstuvwxyz1234567890" },
+                            { "seps", "cfhistu" }
+                        }
+                    }
+                }
+            };
+        }
+
+        [TestMethod]
+        public void AddHashId_Schema()
+        {
+            var config = ConfigFor_AddHashId();
+
+            var service = new TransformService(config);
+
+            var usersSchemaInput = SingerOutput.FromJson("{\"type\": \"SCHEMA\", \"stream\": \"teststream\", \"key_properties\": [\"id\"], \"schema\": {\"required\": [\"id\"], \"type\": [\"object\"], \"properties\": {\"id\": {\"type\": [\"integer\"]}}}}");
+            var usersSchemaOutput = service.Transform(usersSchemaInput);
+
+            // Check new field added
+            Assert.IsNotNull(usersSchemaOutput.Stream);
+            Assert.AreEqual("teststream", usersSchemaOutput.Stream);
+            Assert.IsNotNull(usersSchemaOutput.Schema.Properties["hashid"]);
+
+            var usersSchemaInput2 = SingerOutput.FromJson("{\"type\": \"SCHEMA\", \"stream\": \"otherstream\", \"key_properties\": [\"id\"], \"schema\": {\"required\": [\"id\"], \"type\": [\"object\"], \"properties\": {\"id\": {\"type\": [\"integer\"]}}}}");
+            var usersSchemaOutput2 = service.Transform(usersSchemaInput2);
+
+            // Make sure the output stream has the old name
+            Assert.IsNotNull(usersSchemaOutput2.Stream);
+            Assert.IsFalse(usersSchemaOutput2.Schema.Properties.ContainsKey("hashid"));
+        }
+
+        [TestMethod]
+        public void AddHashId_Record()
+        {
+            var config = ConfigFor_AddHashId();
+
+            var service = new TransformService(config);
+
+            var usersRecordInput = SingerOutput.FromJson("{\"type\": \"RECORD\", \"stream\": \"teststream\", \"record\": {\"id\": 1, \"name\": \"Chris\"}}");
+            var usersRecordOutput = service.Transform(usersRecordInput);
+
+            // Make sure the output stream has the new name
+            Assert.IsNotNull(usersRecordOutput.Stream);
+            Assert.IsTrue(usersRecordOutput.Record.ContainsKey("hashid"));
         }
     }
 }

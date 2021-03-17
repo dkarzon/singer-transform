@@ -1,5 +1,5 @@
 # singer-transform
-A data transformation layer for Singer.io taps and targets.
+A data transformation layer for [Singer.io](https://www.singer.io/) taps and targets.
 
 
 ## Usage
@@ -7,7 +7,7 @@ Put the command between a tap and a target with simple unix pipes:
 ```
 some-singer-tap | dotnet ./singer-transform.dll -c transform_config.json | some-singer-target
 ```
-It reads incoming messages from STDIN and using config.json to transform incoming SCHEMA and RECORD messages. (STATE messages are left untouched)
+It reads incoming messages from STDIN and using config.json to transform incoming [Singer.io SPEC](https://github.com/singer-io/getting-started) messages.
 
 
 ## Config
@@ -17,7 +17,7 @@ It reads incoming messages from STDIN and using config.json to transform incomin
         {
             "stream": "ga_pageviews",
             "transformType": "AddStaticField",
-            "value": "##SITE##",
+            "value": "example.com",
             "field": "ga_site",
             "fieldType": "string",
             "keyProperty": true
@@ -26,6 +26,19 @@ It reads incoming messages from STDIN and using config.json to transform incomin
             "stream": "junkuserstablename",
             "transformType": "RenameStream",
             "value": "users_table"
+        },
+        {
+            "stream": "teststream",
+            "transformType": "AddHashId",
+            "value": "id",
+            "field": "hashid",
+            "fieldType": "string",
+            "properties": {
+                "salt": "my salt",
+                "minHashLength": "5",
+                "alphabet": "abcdefghijklmnopqrstuvwxyz1234567890",
+                "seps": "cfhistu"
+            }
         }
     ]
 }
@@ -37,12 +50,14 @@ The transformation configuration contains a list of transforms with the followin
 - `value` -  The value of the transformation.
 - `field` - The name of the field to transform.
 - `fieldType` - The type of the field if being created to add to the schema.
-- `keyProperty` - Sets if the newly created property is to be set as a key property on the schema.
+- `keyProperty` - Sets if the newly created property is to be set as a key property on the schema. (Optional)
+- `properties` - An object containing any other non-standard properties for the transform (Optional)
 
 
 ## Supported Transforms
-- `AddStaticField` - A transform to add a new field to the output with a static value.
+- `AddStaticField` - Add a new field to the output with a static value.
 - `RenameStream` - Renames a given stream (useful for renaming database tables between tap and target)
+- `AddHashId` - Add a new field to the output with the value set to a hash of an existing field value (using [hashids](https://hashids.org/net/) )
 
 
 ## //TODO

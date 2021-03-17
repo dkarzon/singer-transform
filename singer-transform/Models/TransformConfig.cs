@@ -26,5 +26,8 @@ namespace SingerTransform.Models
 
         [JsonProperty("keyProperty")]
         public bool KeyProperty { get; set; }
+
+        [JsonProperty("properties")]
+        public Dictionary<string, string> Properties { get; set; } = new Dictionary<string, string>();
     }
 }

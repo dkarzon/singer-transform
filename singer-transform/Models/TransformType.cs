@@ -15,6 +15,10 @@ namespace SingerTransform.Models
         /// <summary>
         /// Renames a given stream (useful for renaming database tables between tap and target)
         /// </summary>
-        RenameStream
+        RenameStream,
+        /// <summary>
+        /// Adds a new field as a hash of an existing field
+        /// </summary>
+        AddHashId
     }
 }
