@@ -9,16 +9,16 @@ namespace SingerTransform.Models
     public enum TransformType
     {
         /// <summary>
-        /// Adds a new static field to the output
-        /// </summary>
-        AddStaticField,
-        /// <summary>
         /// Renames a given stream (useful for renaming database tables between tap and target)
         /// </summary>
         RenameStream,
         /// <summary>
         /// Adds a new field as a hash of an existing field
         /// </summary>
-        AddHashId
+        AddHashId,
+        /// <summary>
+        /// Added a new field with a calculated value using Octostache syntax
+        /// </summary>
+        CalculatedField
     }
 }

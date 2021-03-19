@@ -18,7 +18,7 @@ namespace SingerTransform.Tests
                     new TransformConfig
                     {
                         Stream = "users",
-                        TransformType = TransformType.AddStaticField,
+                        TransformType = TransformType.CalculatedField,
                         TransformValue = "TEST1",
                         TransformField = "new_field",
                         TransformFieldType = "string"
@@ -26,7 +26,7 @@ namespace SingerTransform.Tests
                     new TransformConfig
                     {
                         Stream = "users",
-                        TransformType = TransformType.AddStaticField,
+                        TransformType = TransformType.CalculatedField,
                         TransformValue = "TEST2",
                         TransformField = "new_key",
                         TransformFieldType = "string",
@@ -65,7 +65,7 @@ namespace SingerTransform.Tests
             var usersRecordInput = SingerOutput.FromJson("{\"type\": \"RECORD\", \"stream\": \"users\", \"record\": {\"id\": 1, \"name\": \"Chris\"}}");
             var usersRecordOutput = service.Transform(usersRecordInput);
 
-            // Make sure the new field has been added to the output schema
+            // Make sure the new field has been added to the output record
             Assert.IsNotNull(usersRecordOutput.Record["new_field"]);
             Assert.AreEqual("TEST1", (string)usersRecordOutput.Record["new_field"]);
 
@@ -196,6 +196,56 @@ namespace SingerTransform.Tests
             // Make sure the output stream has the new name
             Assert.IsNotNull(usersRecordOutput.Stream);
             Assert.IsTrue(usersRecordOutput.Record.ContainsKey("hashid"));
+        }
+
+        private static Config ConfigFor_CalculatedField()
+        {
+            return new Config
+            {
+                Transforms = new List<TransformConfig>
+                {
+                    new TransformConfig
+                    {
+                        Stream = "teststream",
+                        TransformType = TransformType.CalculatedField,
+                        TransformValue = "#{id}-new",
+                        TransformField = "newid",
+                        TransformFieldType = "string"
+                    }
+                }
+            };
+        }
+
+        [TestMethod]
+        public void CalculatedField_Schema()
+        {
+            var config = ConfigFor_CalculatedField();
+
+            var service = new TransformService(config);
+
+            var usersSchemaInput = SingerOutput.FromJson("{\"type\": \"SCHEMA\", \"stream\": \"teststream\", \"key_properties\": [\"id\"], \"schema\": {\"required\": [\"id\"], \"type\": [\"object\"], \"properties\": {\"id\": {\"type\": [\"integer\"]}}}}");
+            var usersSchemaOutput = service.Transform(usersSchemaInput);
+
+            // Check new field added
+            Assert.IsNotNull(usersSchemaOutput.Stream);
+            Assert.AreEqual("teststream", usersSchemaOutput.Stream);
+            Assert.IsNotNull(usersSchemaOutput.Schema.Properties["newid"]);
+        }
+
+        [TestMethod]
+        public void CalculatedField_Record()
+        {
+            var config = ConfigFor_CalculatedField();
+
+            var service = new TransformService(config);
+
+            var usersRecordInput = SingerOutput.FromJson("{\"type\": \"RECORD\", \"stream\": \"teststream\", \"record\": {\"id\": 1, \"name\": \"Chris\"}}");
+            var usersRecordOutput = service.Transform(usersRecordInput);
+
+            // Make sure the output stream has the new name
+            Assert.IsNotNull(usersRecordOutput.Stream);
+            Assert.IsTrue(usersRecordOutput.Record.ContainsKey("newid"));
+            Assert.AreEqual("1-new", (string)usersRecordOutput.Record["newid"]);
         }
     }
 }

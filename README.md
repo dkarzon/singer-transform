@@ -16,11 +16,18 @@ It reads incoming messages from STDIN and using config.json to transform incomin
     "transforms": [
         {
             "stream": "ga_pageviews",
-            "transformType": "AddStaticField",
+            "transformType": "CalculatedField",
             "value": "example.com",
             "field": "ga_site",
             "fieldType": "string",
             "keyProperty": true
+        },
+        {
+            "stream": "teststream",
+            "transformType": "CalculatedField",
+            "value": "#{id}-new",
+            "field": "newid",
+            "fieldType": "string"
         },
         {
             "stream": "junkuserstablename",
@@ -55,7 +62,7 @@ The transformation configuration contains a list of transforms with the followin
 
 
 ## Supported Transforms
-- `AddStaticField` - Add a new field to the output with a static value.
+- `CalculatedField` - Add a new field with a calculated value using [Octostache](https://github.com/OctopusDeploy/Octostache) syntax.
 - `RenameStream` - Renames a given stream (useful for renaming database tables between tap and target)
 - `AddHashId` - Add a new field to the output with the value set to a hash of an existing field value (using [hashids](https://hashids.org/net/) )
 

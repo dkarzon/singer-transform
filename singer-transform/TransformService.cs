@@ -1,10 +1,9 @@
 ﻿using HashidsNet;
+using Octostache;
 using SingerTransform.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SingerTransform
 {
@@ -29,48 +28,19 @@ namespace SingerTransform
             {
                 switch (transform.TransformType)
                 {
-                    case TransformType.AddStaticField:
-                        HandleAddStaticField(input, transform);
-                        break;
                     case TransformType.RenameStream:
                         HandleRenameStream(input, transform);
                         break;
                     case TransformType.AddHashId:
                         HandleAddHashId(input, transform);
                         break;
+                    case TransformType.CalculatedField:
+                        HandleCalculatedField(input, transform);
+                        break;
                 }
             }
 
             return input;
-        }
-
-        private void HandleAddStaticField(SingerOutput input, TransformConfig transform)
-        {
-            if (input.Type == SingerOutputType.SCHEMA)
-            {
-                if (input.Schema.Properties.ContainsKey(transform.TransformField))
-                    return;
-
-                input.Schema.Properties.Add(transform.TransformField, new SingerSchemaProperty
-                {
-                    Type = new List<string>
-                    {
-                        transform.TransformFieldType
-                    }
-                });
-
-                if (transform.KeyProperty)
-                {
-                    input.KeyProperties.Add(transform.TransformField);
-                }
-            }
-            else if (input.Type == SingerOutputType.RECORD)
-            {
-                if (input.Record.ContainsKey(transform.TransformField))
-                    return;
-
-                input.Record.Add(transform.TransformField, transform.TransformValue);
-            }
         }
 
         private void HandleAddHashId(SingerOutput input, TransformConfig transform)
@@ -133,6 +103,40 @@ namespace SingerTransform
             // This transform applies to all input types
 
             input.Stream = transform.TransformValue;
+        }
+
+        private void HandleCalculatedField(SingerOutput input, TransformConfig transform)
+        {
+            if (input.Type == SingerOutputType.SCHEMA)
+            {
+                if (input.Schema.Properties.ContainsKey(transform.TransformField))
+                    return;
+
+                input.Schema.Properties.Add(transform.TransformField, new SingerSchemaProperty
+                {
+                    Type = new List<string>
+                    {
+                        transform.TransformFieldType
+                    }
+                });
+
+                if (transform.KeyProperty)
+                {
+                    input.KeyProperties.Add(transform.TransformField);
+                }
+            }
+            else if (input.Type == SingerOutputType.RECORD)
+            {
+                var variables = new VariableDictionary();
+
+                foreach (var prop in input.Record)
+                {
+                    variables.Add(prop.Key, prop.Value.ToString());
+                }
+
+                var calcVal = variables.Evaluate(transform.TransformValue);
+                input.Record.Add(transform.TransformField, calcVal);
+            }
         }
     }
 }

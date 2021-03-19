@@ -10,6 +10,7 @@
     <PackageReference Include="CommandLineParser" Version="2.8.0" />
     <PackageReference Include="Hashids.net" Version="1.2.2" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+    <PackageReference Include="Octostache" Version="2.9.4" />
   </ItemGroup>
 
 </Project>
