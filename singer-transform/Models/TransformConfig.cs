@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using SingerTransform.Converters;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,7 +23,8 @@ namespace SingerTransform.Models
         public string TransformField { get; set; }
 
         [JsonProperty("fieldType")]
-        public string TransformFieldType { get; set; }
+        [JsonConverter(typeof(SingleOrArrayConverter<string>))]
+        public List<string> TransformFieldType { get; set; }
 
         [JsonProperty("keyProperty")]
         public bool KeyProperty { get; set; }

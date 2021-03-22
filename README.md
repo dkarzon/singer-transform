@@ -39,7 +39,7 @@ It reads incoming messages from STDIN and using config.json to transform incomin
             "transformType": "AddHashId",
             "value": "id",
             "field": "hashid",
-            "fieldType": "string",
+            "fieldType": ["string", "null"],
             "properties": {
                 "salt": "my salt",
                 "minHashLength": "5",

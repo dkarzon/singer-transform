@@ -21,7 +21,7 @@ namespace SingerTransform.Tests
                         TransformType = TransformType.CalculatedField,
                         TransformValue = "TEST1",
                         TransformField = "new_field",
-                        TransformFieldType = "string"
+                        TransformFieldType = new List<string> { "string" }
                     },
                     new TransformConfig
                     {
@@ -29,7 +29,7 @@ namespace SingerTransform.Tests
                         TransformType = TransformType.CalculatedField,
                         TransformValue = "TEST2",
                         TransformField = "new_key",
-                        TransformFieldType = "string",
+                        TransformFieldType = new List<string> { "string" },
                         KeyProperty = true
                     }
                 }
@@ -147,7 +147,7 @@ namespace SingerTransform.Tests
                         TransformType = TransformType.AddHashId,
                         TransformValue = "id",
                         TransformField = "hashid",
-                        TransformFieldType = "string",
+                        TransformFieldType = new List<string> { "string" },
                         Properties = new Dictionary<string, string>
                         {
                             { "salt", "salt" },
@@ -210,7 +210,7 @@ namespace SingerTransform.Tests
                         TransformType = TransformType.CalculatedField,
                         TransformValue = "#{id}-new",
                         TransformField = "newid",
-                        TransformFieldType = "string"
+                        TransformFieldType = new List<string> { "string" }
                     }
                 }
             };

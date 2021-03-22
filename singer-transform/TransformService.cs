@@ -52,10 +52,7 @@ namespace SingerTransform
 
                 input.Schema.Properties.Add(transform.TransformField, new SingerSchemaProperty
                 {
-                    Type = new List<string>
-                    {
-                        transform.TransformFieldType ?? "string"
-                    }
+                    Type = transform.TransformFieldType
                 });
 
                 if (transform.KeyProperty)
@@ -114,10 +111,7 @@ namespace SingerTransform
 
                 input.Schema.Properties.Add(transform.TransformField, new SingerSchemaProperty
                 {
-                    Type = new List<string>
-                    {
-                        transform.TransformFieldType
-                    }
+                    Type = transform.TransformFieldType
                 });
 
                 if (transform.KeyProperty)
