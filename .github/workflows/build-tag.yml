@@ -30,11 +30,15 @@ jobs:
       with:
         files: singer-transform/bin/Release/net5.0/
         dest: singer-transform.zip
+    
+    - name: Get the version
+      id: get_version
+      run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
 
     - name: Publish Github Release
       uses: marvinpinto/action-automatic-releases@v1.1.1
       with:
-        title: ${{ github.ref }}
+        title: ${{ steps.get_version.outputs.VERSION }}
         repo_token: ${{ secrets.GITHUB_TOKEN }}
         automatic_release_tag: latest
         prerelease: false
