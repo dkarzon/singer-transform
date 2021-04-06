@@ -1,6 +1,7 @@
 ﻿using HashidsNet;
 using Octostache;
 using SingerTransform.Models;
+using SingerTransform.Octostache;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -121,7 +122,7 @@ namespace SingerTransform
             }
             else if (input.Type == SingerOutputType.RECORD)
             {
-                var variables = new VariableDictionary();
+                var variables = new OctostacheDictionary();
 
                 foreach (var prop in input.Record)
                 {

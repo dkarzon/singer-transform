@@ -239,13 +239,47 @@ namespace SingerTransform.Tests
 
             var service = new TransformService(config);
 
-            var usersRecordInput = SingerOutput.FromJson("{\"type\": \"RECORD\", \"stream\": \"teststream\", \"record\": {\"id\": 1, \"name\": \"Chris\"}}");
+            var usersRecordInput = SingerOutput.FromJson("{\"type\": \"RECORD\", \"stream\": \"teststream\", \"record\": {\"id\": 1}}");
             var usersRecordOutput = service.Transform(usersRecordInput);
 
             // Make sure the output stream has the new name
             Assert.IsNotNull(usersRecordOutput.Stream);
             Assert.IsTrue(usersRecordOutput.Record.ContainsKey("newid"));
             Assert.AreEqual("1-new", (string)usersRecordOutput.Record["newid"]);
+        }
+
+        private static Config ConfigFor_CalculatedField2()
+        {
+            return new Config
+            {
+                Transforms = new List<TransformConfig>
+                {
+                    new TransformConfig
+                    {
+                        Stream = "teststream",
+                        TransformType = TransformType.CalculatedField,
+                        TransformValue = "#{url|cleanurl}",
+                        TransformField = "cleanurl",
+                        TransformFieldType = new List<string> { "string" }
+                    }
+                }
+            };
+        }
+
+        [TestMethod]
+        public void CalculatedField2_Record()
+        {
+            var config = ConfigFor_CalculatedField2();
+
+            var service = new TransformService(config);
+
+            var usersRecordOutput = service.Transform(SingerOutput.FromJson("{\"type\": \"RECORD\", \"stream\": \"teststream\", \"record\": {\"url\": \"/\"}}"));
+
+            Assert.AreEqual("/", (string)usersRecordOutput.Record["cleanurl"]);
+
+            usersRecordOutput = service.Transform(SingerOutput.FromJson("{\"type\": \"RECORD\", \"stream\": \"teststream\", \"record\": {\"url\": \"/testurl?q=search\"}}"));
+
+            Assert.AreEqual("/testurl", (string)usersRecordOutput.Record["cleanurl"]);
         }
     }
 }
