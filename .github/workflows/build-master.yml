@@ -16,9 +16,24 @@ jobs:
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 5.0.201
+
     - name: Install dependencies
       run: dotnet restore
     - name: Build
       run: dotnet build --configuration Release --no-restore
     - name: Test
       run: dotnet test --no-restore --verbosity normal
+
+    - name: Zip Package Files
+      uses: papeloto/action-zip@v1
+      with:
+        files: singer-transform/bin/Release/net5.0/
+        dest: singer-transform.zip
+
+    - name: Publish Github Release
+      uses: marvinpinto/action-automatic-releases@v1.1.1
+      with:
+        repo_token: ${{ secrets.GITHUB_TOKEN }}
+        automatic_release_tag: latest-pre,
+        prerelease: true
+        files: singer-transform.zip

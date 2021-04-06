@@ -35,7 +35,7 @@ namespace SingerTransform
 
                                Console.WriteLine(JsonConvert.SerializeObject(transformed));
                            }
-                           catch (Exception ex)
+                           catch //(Exception ex)
                            {
                                throw;
                            }
