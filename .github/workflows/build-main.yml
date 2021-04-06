@@ -1,4 +1,4 @@
-name: Publish Packages
+name: Publish Pre-Packages
 
 on:
   push:
@@ -34,6 +34,6 @@ jobs:
       uses: marvinpinto/action-automatic-releases@v1.1.1
       with:
         repo_token: ${{ secrets.GITHUB_TOKEN }}
-        automatic_release_tag: latest-pre,
+        automatic_release_tag: latest-pre
         prerelease: true
         files: singer-transform.zip
