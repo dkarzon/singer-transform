@@ -38,6 +38,9 @@ namespace SingerTransform
                     case TransformType.CalculatedField:
                         HandleCalculatedField(input, transform);
                         break;
+                    case TransformType.RenameField:
+                        HandleRenameField(input, transform);
+                        break;
                 }
             }
 
@@ -101,6 +104,28 @@ namespace SingerTransform
             // This transform applies to all input types
 
             input.Stream = transform.TransformValue;
+        }
+
+        private void HandleRenameField(SingerOutput input, TransformConfig transform)
+        {
+            if (input.Type == SingerOutputType.SCHEMA)
+            {
+                if (!input.Schema.Properties.ContainsKey(transform.TransformField))
+                    return;
+
+                var propToRename = input.Schema.Properties[transform.TransformField];
+                input.Schema.Properties.Remove(transform.TransformField);
+                input.Schema.Properties.Add(transform.TransformValue, propToRename);
+            }
+            else if (input.Type == SingerOutputType.RECORD)
+            {
+                if (!input.Record.ContainsKey(transform.TransformField))
+                    return;
+
+                var propToRename = input.Record[transform.TransformField];
+                input.Record.Remove(transform.TransformField);
+                input.Record.Add(transform.TransformValue, propToRename);
+            }
         }
 
         private void HandleCalculatedField(SingerOutput input, TransformConfig transform)

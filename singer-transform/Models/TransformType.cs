@@ -19,6 +19,10 @@ namespace SingerTransform.Models
         /// <summary>
         /// Added a new field with a calculated value using Octostache syntax
         /// </summary>
-        CalculatedField
+        CalculatedField,
+        /// <summary>
+        /// Renames a field in a stream
+        /// </summary>
+        RenameField
     }
 }
