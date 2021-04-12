@@ -35,6 +35,12 @@ It reads incoming messages from STDIN and using config.json to transform incomin
             "value": "users_table"
         },
         {
+            "stream": "users_table",
+            "transformType": "RenameField",
+            "field": "complexidcolumn",
+            "value": "userid"
+        },
+        {
             "stream": "teststream",
             "transformType": "AddHashId",
             "value": "id",
@@ -64,6 +70,7 @@ The transformation configuration contains a list of transforms with the followin
 ## Supported Transforms
 - `CalculatedField` - Add a new field with a calculated value using [Octostache](https://github.com/OctopusDeploy/Octostache) syntax.
 - `RenameStream` - Renames a given stream (useful for renaming database tables between tap and target)
+- `RenameField` - Renames a field in a stream
 - `AddHashId` - Add a new field to the output with the value set to a hash of an existing field value (using [hashids](https://hashids.org/net/) )
 
 
