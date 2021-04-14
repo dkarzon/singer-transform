@@ -40,10 +40,39 @@ namespace SingerTransform
                     case TransformType.RenameField:
                         HandleRenameField(input, transform);
                         break;
+                    case TransformType.FormatDate:
+                        HandleFormatDate(input, transform);
+                        break;
                 }
             }
 
             return input;
+        }
+
+        private void HandleFormatDate(SingerOutput input, TransformConfig transform)
+        {
+            if (input.Type == SingerOutputType.SCHEMA)
+            {
+                if (!input.Schema.Properties.ContainsKey(transform.TransformField))
+                    return;
+
+                input.Schema.Properties[transform.TransformField].Format = "date-time";
+            }
+            else if (input.Type == SingerOutputType.RECORD)
+            {
+                if (!input.Record.ContainsKey(transform.TransformField))
+                    return;
+
+                var strDate = input.Record[transform.TransformField].ToString();
+                try
+                {
+                    var parsedDate = DateTime.ParseExact(strDate, "yyyyMMdd", null);
+                    input.Record[transform.TransformField] = parsedDate.ToString("yyyy-MM-dd");
+                }
+                catch
+                {
+                }
+            }
         }
 
         private void HandleAddHashId(SingerOutput input, TransformConfig transform)

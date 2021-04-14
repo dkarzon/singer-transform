@@ -23,6 +23,10 @@ namespace SingerTransform.Models
         /// <summary>
         /// Renames a field in a stream
         /// </summary>
-        RenameField
+        RenameField,
+        /// <summary>
+        /// Formats a string date as a regular date (useful for Google Analytics date formats)
+        /// </summary>
+        FormatDate
     }
 }

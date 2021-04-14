@@ -289,12 +289,60 @@ namespace SingerTransform.Tests
 
             var service = new TransformService(config);
 
-            var usersRecordInput = SingerOutput.FromJson("{\"type\": \"RECORD\", \"stream\": \"teststream\", \"record\": {\"id\": 1, \"name\": \"Chris\"}}");
+            var usersRecordInput = SingerOutput.FromJson("{\"type\": \"RECORD\", \"stream\": \"teststream\", \"record\": {\"id\": 1}}");
             var usersRecordOutput = service.Transform(usersRecordInput);
 
             Assert.IsNotNull(usersRecordOutput.Stream);
             Assert.IsTrue(usersRecordOutput.Record.ContainsKey("newid"));
             Assert.AreEqual("1", (string)usersRecordOutput.Record["newid"]);
+        }
+
+
+        private static Config ConfigFor_FormatDate()
+        {
+            return new Config
+            {
+                Transforms = new List<TransformConfig>
+                {
+                    new TransformConfig
+                    {
+                        Stream = "teststream",
+                        TransformType = TransformType.FormatDate,
+                        TransformField = "date"
+                    }
+                }
+            };
+        }
+
+        [TestMethod]
+        public void FormatDate_Schema()
+        {
+            var config = ConfigFor_FormatDate();
+
+            var service = new TransformService(config);
+
+            var usersSchemaInput = SingerOutput.FromJson("{\"type\": \"SCHEMA\", \"stream\": \"teststream\", \"key_properties\": [\"date\"], \"schema\": {\"required\": [\"date\"], \"type\": [\"object\"], \"properties\": {\"date\": {\"type\": [\"string\"]}}}}");
+            var usersSchemaOutput = service.Transform(usersSchemaInput);
+
+            Assert.IsNotNull(usersSchemaOutput.Stream);
+            Assert.IsNotNull(usersSchemaOutput.Schema.Properties["date"]);
+            Assert.IsNotNull(usersSchemaOutput.Schema.Properties["date"].Format);
+            Assert.AreEqual("date-time", usersSchemaOutput.Schema.Properties["date"].Format);
+        }
+
+        [TestMethod]
+        public void FormatDate_Record()
+        {
+            var config = ConfigFor_FormatDate();
+
+            var service = new TransformService(config);
+
+            var usersRecordInput = SingerOutput.FromJson("{\"type\": \"RECORD\", \"stream\": \"teststream\", \"record\": {\"date\": \"20210101\"}}");
+            var usersRecordOutput = service.Transform(usersRecordInput);
+
+            Assert.IsNotNull(usersRecordOutput.Stream);
+            Assert.IsTrue(usersRecordOutput.Record.ContainsKey("date"));
+            Assert.AreEqual("2021-01-01", (string)usersRecordOutput.Record["date"]);
         }
     }
 }
