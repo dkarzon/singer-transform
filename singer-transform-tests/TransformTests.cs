@@ -18,18 +18,18 @@ namespace SingerTransform.Tests
                     new TransformConfig
                     {
                         Stream = "users",
-                        TransformType = TransformType.CalculatedField,
+                        TransformType = TransformType.CalculatedProperty,
                         TransformValue = "TEST1",
-                        TransformField = "new_field",
-                        TransformFieldType = new List<string> { "string" }
+                        TransformProperty = "new_field",
+                        TransformPropertyType = new List<string> { "string" }
                     },
                     new TransformConfig
                     {
                         Stream = "users",
-                        TransformType = TransformType.CalculatedField,
+                        TransformType = TransformType.CalculatedProperty,
                         TransformValue = "TEST2",
-                        TransformField = "new_key",
-                        TransformFieldType = new List<string> { "string" },
+                        TransformProperty = "new_key",
+                        TransformPropertyType = new List<string> { "string" },
                         KeyProperty = true
                     }
                 }
@@ -146,9 +146,9 @@ namespace SingerTransform.Tests
                         Stream = "teststream",
                         TransformType = TransformType.AddHashId,
                         TransformValue = "id",
-                        TransformField = "hashid",
-                        TransformFieldType = new List<string> { "string" },
-                        Properties = new Dictionary<string, string>
+                        TransformProperty = "hashid",
+                        TransformPropertyType = new List<string> { "string" },
+                        Settings = new Dictionary<string, string>
                         {
                             { "salt", "salt" },
                             { "minHashLength", "5" },
@@ -207,10 +207,10 @@ namespace SingerTransform.Tests
                     new TransformConfig
                     {
                         Stream = "teststream",
-                        TransformType = TransformType.CalculatedField,
+                        TransformType = TransformType.CalculatedProperty,
                         TransformValue = "#{id}-new",
-                        TransformField = "newid",
-                        TransformFieldType = new List<string> { "string" }
+                        TransformProperty = "newid",
+                        TransformPropertyType = new List<string> { "string" }
                     }
                 }
             };
@@ -259,9 +259,9 @@ namespace SingerTransform.Tests
                     new TransformConfig
                     {
                         Stream = "teststream",
-                        TransformType = TransformType.RenameField,
+                        TransformType = TransformType.RenameProperty,
                         TransformValue = "newid",
-                        TransformField = "id"
+                        TransformProperty = "id"
                     }
                 }
             };
@@ -308,7 +308,7 @@ namespace SingerTransform.Tests
                     {
                         Stream = "teststream",
                         TransformType = TransformType.FormatDate,
-                        TransformField = "date"
+                        TransformProperty = "date"
                     }
                 }
             };

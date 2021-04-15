@@ -15,11 +15,11 @@ namespace SingerTransform.Tests
         [TestMethod]
         public void ConfigParseEnumTest()
         {
-            var configJson = "{\"transforms\": [{\"stream\": \"ga_acquisition\",\"transformType\": \"CalculatedField\",\"value\": \"##SITE##\",\"field\": \"ga_site\",\"fieldType\": \"string\"}]}";
+            var configJson = "{\"transforms\": [{\"stream\": \"ga_acquisition\",\"transformType\": \"CalculatedProperty\",\"value\": \"##SITE##\",\"property\": \"ga_site\",\"propertyType\": \"string\"}]}";
 
             var config = JsonConvert.DeserializeObject<Config>(configJson);
 
-            Assert.AreEqual(TransformType.CalculatedField, config.Transforms[0].TransformType);
+            Assert.AreEqual(TransformType.CalculatedProperty, config.Transforms[0].TransformType);
         }
 
         [TestMethod]

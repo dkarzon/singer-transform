@@ -13,17 +13,17 @@ namespace SingerTransform.Models
         /// </summary>
         RenameStream,
         /// <summary>
-        /// Adds a new field as a hash of an existing field
+        /// Adds a new property as a hash of an existing field
         /// </summary>
         AddHashId,
         /// <summary>
-        /// Added a new field with a calculated value using Octostache syntax
+        /// Added a new property with a calculated value using Octostache syntax
         /// </summary>
-        CalculatedField,
+        CalculatedProperty,
         /// <summary>
-        /// Renames a field in a stream
+        /// Renames a property in a stream
         /// </summary>
-        RenameField,
+        RenameProperty,
         /// <summary>
         /// Formats a string date as a regular date (useful for Google Analytics date formats)
         /// </summary>

@@ -34,10 +34,10 @@ namespace SingerTransform
                     case TransformType.AddHashId:
                         HandleAddHashId(input, transform);
                         break;
-                    case TransformType.CalculatedField:
+                    case TransformType.CalculatedProperty:
                         HandleCalculatedField(input, transform);
                         break;
-                    case TransformType.RenameField:
+                    case TransformType.RenameProperty:
                         HandleRenameField(input, transform);
                         break;
                     case TransformType.FormatDate:
@@ -53,21 +53,21 @@ namespace SingerTransform
         {
             if (input.Type == SingerOutputType.SCHEMA)
             {
-                if (!input.Schema.Properties.ContainsKey(transform.TransformField))
+                if (!input.Schema.Properties.ContainsKey(transform.TransformProperty))
                     return;
 
-                input.Schema.Properties[transform.TransformField].Format = "date-time";
+                input.Schema.Properties[transform.TransformProperty].Format = "date-time";
             }
             else if (input.Type == SingerOutputType.RECORD)
             {
-                if (!input.Record.ContainsKey(transform.TransformField))
+                if (!input.Record.ContainsKey(transform.TransformProperty))
                     return;
 
-                var strDate = input.Record[transform.TransformField].ToString();
+                var strDate = input.Record[transform.TransformProperty].ToString();
                 try
                 {
                     var parsedDate = DateTime.ParseExact(strDate, "yyyyMMdd", null);
-                    input.Record[transform.TransformField] = parsedDate.ToString("yyyy-MM-dd");
+                    input.Record[transform.TransformProperty] = parsedDate.ToString("yyyy-MM-dd");
                 }
                 catch
                 {
@@ -79,25 +79,25 @@ namespace SingerTransform
         {
             if (input.Type == SingerOutputType.SCHEMA)
             {
-                if (input.Schema.Properties.ContainsKey(transform.TransformField))
+                if (input.Schema.Properties.ContainsKey(transform.TransformProperty))
                     return;
 
-                input.Schema.Properties.Add(transform.TransformField, new SingerSchemaProperty
+                input.Schema.Properties.Add(transform.TransformProperty, new SingerSchemaProperty
                 {
-                    Type = transform.TransformFieldType
+                    Type = transform.TransformPropertyType
                 });
 
                 if (transform.KeyProperty)
                 {
-                    input.KeyProperties.Add(transform.TransformField);
+                    input.KeyProperties.Add(transform.TransformProperty);
                 }
             }
             else if (input.Type == SingerOutputType.RECORD)
             {
-                if (input.Record.ContainsKey(transform.TransformField))
+                if (input.Record.ContainsKey(transform.TransformProperty))
                     return;
 
-                var hashProps = transform.Properties ?? new Dictionary<string, string>();
+                var hashProps = transform.Settings ?? new Dictionary<string, string>();
                 string salt = null;
                 if (hashProps.ContainsKey("salt"))
                 {
@@ -123,7 +123,7 @@ namespace SingerTransform
                 var valToHash = input.Record[transform.TransformValue].ToObject<int>();
                 var hashedVal = hashId.Encode(valToHash);
 
-                input.Record.Add(transform.TransformField, hashedVal);
+                input.Record.Add(transform.TransformProperty, hashedVal);
             }
         }
 
@@ -138,20 +138,20 @@ namespace SingerTransform
         {
             if (input.Type == SingerOutputType.SCHEMA)
             {
-                if (!input.Schema.Properties.ContainsKey(transform.TransformField))
+                if (!input.Schema.Properties.ContainsKey(transform.TransformProperty))
                     return;
 
-                var propToRename = input.Schema.Properties[transform.TransformField];
-                input.Schema.Properties.Remove(transform.TransformField);
+                var propToRename = input.Schema.Properties[transform.TransformProperty];
+                input.Schema.Properties.Remove(transform.TransformProperty);
                 input.Schema.Properties.Add(transform.TransformValue, propToRename);
             }
             else if (input.Type == SingerOutputType.RECORD)
             {
-                if (!input.Record.ContainsKey(transform.TransformField))
+                if (!input.Record.ContainsKey(transform.TransformProperty))
                     return;
 
-                var propToRename = input.Record[transform.TransformField];
-                input.Record.Remove(transform.TransformField);
+                var propToRename = input.Record[transform.TransformProperty];
+                input.Record.Remove(transform.TransformProperty);
                 input.Record.Add(transform.TransformValue, propToRename);
             }
         }
@@ -160,17 +160,17 @@ namespace SingerTransform
         {
             if (input.Type == SingerOutputType.SCHEMA)
             {
-                if (input.Schema.Properties.ContainsKey(transform.TransformField))
+                if (input.Schema.Properties.ContainsKey(transform.TransformProperty))
                     return;
 
-                input.Schema.Properties.Add(transform.TransformField, new SingerSchemaProperty
+                input.Schema.Properties.Add(transform.TransformProperty, new SingerSchemaProperty
                 {
-                    Type = transform.TransformFieldType
+                    Type = transform.TransformPropertyType
                 });
 
                 if (transform.KeyProperty)
                 {
-                    input.KeyProperties.Add(transform.TransformField);
+                    input.KeyProperties.Add(transform.TransformProperty);
                 }
             }
             else if (input.Type == SingerOutputType.RECORD)
@@ -183,7 +183,7 @@ namespace SingerTransform
                 }
 
                 var calcVal = variables.Evaluate(transform.TransformValue);
-                input.Record.Add(transform.TransformField, calcVal);
+                input.Record.Add(transform.TransformProperty, calcVal);
             }
         }
     }

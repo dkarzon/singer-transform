@@ -19,17 +19,17 @@ namespace SingerTransform.Models
         [JsonProperty("value")]
         public string TransformValue { get; set; }
 
-        [JsonProperty("field")]
-        public string TransformField { get; set; }
+        [JsonProperty("property")]
+        public string TransformProperty { get; set; }
 
-        [JsonProperty("fieldType")]
+        [JsonProperty("propertyType")]
         [JsonConverter(typeof(SingleOrArrayConverter<string>))]
-        public List<string> TransformFieldType { get; set; }
+        public List<string> TransformPropertyType { get; set; }
 
         [JsonProperty("keyProperty")]
         public bool KeyProperty { get; set; }
 
-        [JsonProperty("properties")]
-        public Dictionary<string, string> Properties { get; set; } = new Dictionary<string, string>();
+        [JsonProperty("settings")]
+        public Dictionary<string, string> Settings { get; set; } = new Dictionary<string, string>();
     }
 }
