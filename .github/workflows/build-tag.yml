@@ -40,6 +40,5 @@ jobs:
       with:
         title: ${{ steps.get_version.outputs.VERSION }}
         repo_token: ${{ secrets.GITHUB_TOKEN }}
-        automatic_release_tag: latest
         prerelease: false
         files: singer-transform.zip
