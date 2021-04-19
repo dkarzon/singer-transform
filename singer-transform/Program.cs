@@ -29,7 +29,7 @@ namespace SingerTransform
                        {
                            try
                            {
-                               var singerOutput = SingerOutput.FromJson(s);
+                               var singerOutput = SingerMessage.FromJson(s);
 
                                var transformed = transformService.Transform(singerOutput);
 

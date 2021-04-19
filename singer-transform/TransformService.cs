@@ -17,7 +17,7 @@ namespace SingerTransform
             _config = config;
         }
 
-        public SingerOutput Transform(SingerOutput input)
+        public SingerMessage Transform(SingerMessage input)
         {
             var streamTransforms = _config.Transforms.Where(c => c.Stream == input.Stream).ToList();
             if (!streamTransforms.Any())
@@ -50,16 +50,16 @@ namespace SingerTransform
             return input;
         }
 
-        private void HandleFormatDate(SingerOutput input, TransformConfig transform)
+        private void HandleFormatDate(SingerMessage input, TransformConfig transform)
         {
-            if (input.Type == SingerOutputType.SCHEMA)
+            if (input.Type == SingerMessageType.SCHEMA)
             {
                 if (!input.Schema.Properties.ContainsKey(transform.TransformProperty))
                     return;
 
                 input.Schema.Properties[transform.TransformProperty].Format = "date-time";
             }
-            else if (input.Type == SingerOutputType.RECORD)
+            else if (input.Type == SingerMessageType.RECORD)
             {
                 if (!input.Record.ContainsKey(transform.TransformProperty))
                     return;
@@ -76,9 +76,9 @@ namespace SingerTransform
             }
         }
 
-        private void HandleAddHashId(SingerOutput input, TransformConfig transform)
+        private void HandleAddHashId(SingerMessage input, TransformConfig transform)
         {
-            if (input.Type == SingerOutputType.SCHEMA)
+            if (input.Type == SingerMessageType.SCHEMA)
             {
                 if (input.Schema.Properties.ContainsKey(transform.TransformProperty))
                     return;
@@ -93,7 +93,7 @@ namespace SingerTransform
                     input.KeyProperties.Add(transform.TransformProperty);
                 }
             }
-            else if (input.Type == SingerOutputType.RECORD)
+            else if (input.Type == SingerMessageType.RECORD)
             {
                 if (input.Record.ContainsKey(transform.TransformProperty))
                     return;
@@ -128,16 +128,16 @@ namespace SingerTransform
             }
         }
 
-        private void HandleRenameStream(SingerOutput input, TransformConfig transform)
+        private void HandleRenameStream(SingerMessage input, TransformConfig transform)
         {
             // This transform applies to all input types
 
             input.Stream = transform.TransformValue;
         }
 
-        private void HandleRenameField(SingerOutput input, TransformConfig transform)
+        private void HandleRenameField(SingerMessage input, TransformConfig transform)
         {
-            if (input.Type == SingerOutputType.SCHEMA)
+            if (input.Type == SingerMessageType.SCHEMA)
             {
                 if (!input.Schema.Properties.ContainsKey(transform.TransformProperty))
                     return;
@@ -146,7 +146,7 @@ namespace SingerTransform
                 input.Schema.Properties.Remove(transform.TransformProperty);
                 input.Schema.Properties.Add(transform.TransformValue, propToRename);
             }
-            else if (input.Type == SingerOutputType.RECORD)
+            else if (input.Type == SingerMessageType.RECORD)
             {
                 if (!input.Record.ContainsKey(transform.TransformProperty))
                     return;
@@ -157,9 +157,9 @@ namespace SingerTransform
             }
         }
 
-        private void HandleCalculatedField(SingerOutput input, TransformConfig transform)
+        private void HandleCalculatedField(SingerMessage input, TransformConfig transform)
         {
-            if (input.Type == SingerOutputType.SCHEMA)
+            if (input.Type == SingerMessageType.SCHEMA)
             {
                 if (input.Schema.Properties.ContainsKey(transform.TransformProperty))
                     return;
@@ -174,7 +174,7 @@ namespace SingerTransform
                     input.KeyProperties.Add(transform.TransformProperty);
                 }
             }
-            else if (input.Type == SingerOutputType.RECORD)
+            else if (input.Type == SingerMessageType.RECORD)
             {
                 var variables = new OctostacheDictionary();
 

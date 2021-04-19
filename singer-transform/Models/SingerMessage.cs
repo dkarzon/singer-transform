@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace SingerTransform.Models
 {
-    public class SingerOutput
+    public class SingerMessage
     {
         [JsonProperty("type")]
         public string Type { get; set; }
@@ -37,9 +37,9 @@ namespace SingerTransform.Models
         [JsonExtensionData]
         public Dictionary<string, JToken> Children { get; set; }
 
-        public static SingerOutput FromJson(string json)
+        public static SingerMessage FromJson(string json)
         {
-            return JsonConvert.DeserializeObject<SingerOutput>(json);
+            return JsonConvert.DeserializeObject<SingerMessage>(json);
         }
     }
 }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SingerTransform.Models
 {
-    public static class SingerOutputType
+    public static class SingerMessageType
     {
         public static string RECORD = "RECORD";
         public static string SCHEMA = "SCHEMA";

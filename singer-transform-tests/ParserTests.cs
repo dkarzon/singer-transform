@@ -28,8 +28,8 @@ namespace SingerTransform.Tests
             var outputJsonSingle = "{\"schema\": {\"type\": \"object\"}}";
             var outputJsonArray = "{\"schema\": {\"type\": [\"string\",\"null\"]}}";
 
-            var outputSingle = SingerOutput.FromJson(outputJsonSingle);
-            var outputArray = SingerOutput.FromJson(outputJsonArray);
+            var outputSingle = SingerMessage.FromJson(outputJsonSingle);
+            var outputArray = SingerMessage.FromJson(outputJsonArray);
 
             Assert.AreEqual(1, outputSingle.Schema.Type.Count);
             Assert.AreEqual("object", outputSingle.Schema.Type[0]);
