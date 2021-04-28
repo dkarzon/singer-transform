@@ -20,5 +20,11 @@ It reads incoming messages from STDIN and using config.json to transform incomin
 Check the [Transform Configs doc](transform-configs.md) for more info.
 
 
-## //TODO
-How to install it...?
+## Installing in a dockerfile
+Ensure dotnet is installed [details here](https://github.com/dotnet/dotnet-docker/blob/main/documentation/scenarios/installing-dotnet.md)
+
+```
+# Install singer-transform
+RUN curl -SL --output singer-transform.zip https://github.com/dkarzon/singer-transform/releases/download/v0.2.1/singer-transform.zip \
+    && unzip -d /external/singer-transform/ ./singer-transform.zip
+```
