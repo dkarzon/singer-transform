@@ -318,6 +318,10 @@ namespace SingerTransform.Tests
             usersRecordOutput = service.Transform(SingerMessage.FromJson("{\"type\": \"RECORD\", \"stream\": \"teststream\", \"record\": {\"url\": \"/testurl?q=search\"}}"));
 
             Assert.AreEqual("/testurl", (string)usersRecordOutput.Record["cleanurl"]);
+
+            usersRecordOutput = service.Transform(SingerMessage.FromJson("{\"type\": \"RECORD\", \"stream\": \"teststream\", \"record\": {\"url\": \"/testurl2#search\"}}"));
+
+            Assert.AreEqual("/testurl2", (string)usersRecordOutput.Record["cleanurl"]);
         }
 
 

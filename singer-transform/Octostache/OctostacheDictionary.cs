@@ -18,12 +18,12 @@ namespace SingerTransform.Octostache
             _dictionary.AddExtension("cleanurl", CleanUrl);
         }
 
-        public void Add(string key, string? value)
+        public void Add(string key, string value)
         {
             _dictionary.Add(key, value);
         }
 
-        public string? Evaluate(string? expressionOrVariableOrText)
+        public string Evaluate(string expressionOrVariableOrText)
         {
             return _dictionary.Evaluate(expressionOrVariableOrText);
         }
@@ -35,6 +35,11 @@ namespace SingerTransform.Octostache
             if (parsedUrl?.Contains('?') ?? false)
             {
                 parsedUrl = parsedUrl.Substring(0, parsedUrl.IndexOf('?'));
+            }
+
+            if (parsedUrl?.Contains('#') ?? false)
+            {
+                parsedUrl = parsedUrl.Substring(0, parsedUrl.IndexOf('#'));
             }
 
             return parsedUrl;
