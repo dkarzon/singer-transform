@@ -11,7 +11,7 @@ namespace SingerTransform.Models
 {
     public class SingerSchemaProperty
     {
-        [JsonProperty("type")]
+        [JsonProperty("type", NullValueHandling = NullValueHandling.Ignore)]
         [JsonConverter(typeof(SingleOrArrayConverter<string>))]
         public List<string> Type { get; set; }
 
