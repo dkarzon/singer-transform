@@ -30,19 +30,22 @@ namespace SingerTransform
                 switch (transform.TransformType)
                 {
                     case TransformType.RenameStream:
-                        HandleRenameStream(input, transform);
+                        input = HandleRenameStream(input, transform);
                         break;
                     case TransformType.AddHashId:
-                        HandleAddHashId(input, transform);
+                        input = HandleAddHashId(input, transform);
                         break;
                     case TransformType.CalculatedProperty:
-                        HandleCalculatedField(input, transform);
+                        input = HandleCalculatedField(input, transform);
                         break;
                     case TransformType.RenameProperty:
-                        HandleRenameField(input, transform);
+                        input = HandleRenameField(input, transform);
                         break;
                     case TransformType.FormatDate:
-                        HandleFormatDate(input, transform);
+                        input = HandleFormatDate(input, transform);
+                        break;
+                    case TransformType.NoTableVersioning:
+                        input = HandleNoTableVersioning(input, transform);
                         break;
                 }
             }
@@ -50,19 +53,19 @@ namespace SingerTransform
             return input;
         }
 
-        private void HandleFormatDate(SingerMessage input, TransformConfig transform)
+        private SingerMessage HandleFormatDate(SingerMessage input, TransformConfig transform)
         {
             if (input.Type == SingerMessageType.SCHEMA)
             {
                 if (!input.Schema.Properties.ContainsKey(transform.TransformProperty))
-                    return;
+                    return input;
 
                 input.Schema.Properties[transform.TransformProperty].Format = "date-time";
             }
             else if (input.Type == SingerMessageType.RECORD)
             {
                 if (!input.Record.ContainsKey(transform.TransformProperty))
-                    return;
+                    return input;
 
                 var strDate = input.Record[transform.TransformProperty].ToString();
                 try
@@ -74,14 +77,16 @@ namespace SingerTransform
                 {
                 }
             }
+
+            return input;
         }
 
-        private void HandleAddHashId(SingerMessage input, TransformConfig transform)
+        private SingerMessage HandleAddHashId(SingerMessage input, TransformConfig transform)
         {
             if (input.Type == SingerMessageType.SCHEMA)
             {
                 if (input.Schema.Properties.ContainsKey(transform.TransformProperty))
-                    return;
+                    return input;
 
                 input.Schema.Properties.Add(transform.TransformProperty, new SingerSchemaProperty
                 {
@@ -96,7 +101,7 @@ namespace SingerTransform
             else if (input.Type == SingerMessageType.RECORD)
             {
                 if (input.Record.ContainsKey(transform.TransformProperty))
-                    return;
+                    return input;
 
                 var hashProps = transform.Settings ?? new Dictionary<string, string>();
                 string salt = null;
@@ -126,21 +131,25 @@ namespace SingerTransform
 
                 input.Record.Add(transform.TransformProperty, hashedVal);
             }
+
+            return input;
         }
 
-        private void HandleRenameStream(SingerMessage input, TransformConfig transform)
+        private SingerMessage HandleRenameStream(SingerMessage input, TransformConfig transform)
         {
             // This transform applies to all input types
 
             input.Stream = transform.TransformValue;
+
+            return input;
         }
 
-        private void HandleRenameField(SingerMessage input, TransformConfig transform)
+        private SingerMessage HandleRenameField(SingerMessage input, TransformConfig transform)
         {
             if (input.Type == SingerMessageType.SCHEMA)
             {
                 if (!input.Schema.Properties.ContainsKey(transform.TransformProperty))
-                    return;
+                    return input;
 
                 var propToRename = input.Schema.Properties[transform.TransformProperty];
                 input.Schema.Properties.Remove(transform.TransformProperty);
@@ -149,20 +158,22 @@ namespace SingerTransform
             else if (input.Type == SingerMessageType.RECORD)
             {
                 if (!input.Record.ContainsKey(transform.TransformProperty))
-                    return;
+                    return input;
 
                 var propToRename = input.Record[transform.TransformProperty];
                 input.Record.Remove(transform.TransformProperty);
                 input.Record.Add(transform.TransformValue, propToRename);
             }
+
+            return input;
         }
 
-        private void HandleCalculatedField(SingerMessage input, TransformConfig transform)
+        private SingerMessage HandleCalculatedField(SingerMessage input, TransformConfig transform)
         {
             if (input.Type == SingerMessageType.SCHEMA)
             {
                 if (input.Schema.Properties.ContainsKey(transform.TransformProperty))
-                    return;
+                    return input;
 
                 input.Schema.Properties.Add(transform.TransformProperty, new SingerSchemaProperty
                 {
@@ -186,6 +197,24 @@ namespace SingerTransform
                 var calcVal = variables.Evaluate(transform.TransformValue);
                 input.Record.Add(transform.TransformProperty, calcVal);
             }
+
+            return input;
+        }
+
+        private SingerMessage HandleNoTableVersioning(SingerMessage input, TransformConfig transform)
+        {
+            if (input.Type == SingerMessageType.ACTIVATE_VERSION)
+            {
+                // Don't pass on these messages
+                return null;
+            }
+            if (input.Type == SingerMessageType.RECORD)
+            {
+                // Remove the versioning from the record messages
+                input.Version = null;
+            }
+
+            return input;
         }
     }
 }

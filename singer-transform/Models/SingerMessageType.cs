@@ -11,5 +11,6 @@ namespace SingerTransform.Models
         public static string RECORD = "RECORD";
         public static string SCHEMA = "SCHEMA";
         public static string STATE = "STATE";
+        public static string ACTIVATE_VERSION = "ACTIVATE_VERSION";
     }
 }

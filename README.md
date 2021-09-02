@@ -16,6 +16,7 @@ It reads incoming messages from STDIN and using config.json to transform incomin
 - `RenameProperty` - Renames a property in a stream
 - `AddHashId` - Add a new property to the output with the value set to a hash of an existing property value (using [hashids](https://hashids.org/net/) )
 - `FormatDate` - Formats a string date as a regular date (useful for Google Analytics date formats, ie. `"20210101"`)
+- `NoTableVersioning` - Formats a string date as a regular date (useful for Google Analytics date formats, ie. `"20210101"`)
 
 Check the [Transform Configs doc](transform-configs.md) for more info.
 

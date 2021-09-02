@@ -27,6 +27,10 @@ namespace SingerTransform.Models
         /// <summary>
         /// Formats a string date as a regular date (useful for Google Analytics date formats)
         /// </summary>
-        FormatDate
+        FormatDate,
+        /// <summary>
+        /// Hack to convert full table replication to not force table rebuilds
+        /// </summary>
+        NoTableVersioning
     }
 }

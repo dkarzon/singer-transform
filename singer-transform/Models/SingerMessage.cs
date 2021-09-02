@@ -34,6 +34,9 @@ namespace SingerTransform.Models
         [JsonProperty("bookmark_properties", NullValueHandling = NullValueHandling.Ignore)]
         public List<string> BookmarkProperties { get; set; }
 
+        [JsonProperty("version", NullValueHandling = NullValueHandling.Ignore)]
+        public string Version { get; set; }
+
         [JsonExtensionData]
         public Dictionary<string, JToken> Children { get; set; }
 
