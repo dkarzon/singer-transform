@@ -112,7 +112,7 @@ Formats a string date as a regular date (useful for Google Analytics date format
 ```
 
 ## NoTableVersioning
-Hack to convert full table replication to bypass table versioning (which requires the table to be dropped and recreated)
+Hack to bypass table versioning on full table replication (which requires the table to be dropped and recreated)
 
 ```json
 {

@@ -29,7 +29,7 @@ namespace SingerTransform.Models
         /// </summary>
         FormatDate,
         /// <summary>
-        /// Hack to convert full table replication to not force table rebuilds
+        /// Hack to bypass table versioning on full table replication (which requires the table to be dropped and recreated)
         /// </summary>
         NoTableVersioning
     }
