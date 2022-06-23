@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.30804.86
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.32014.148
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "singer-transform", "singer-transform\singer-transform.csproj", "{3ADA60A4-21FC-418B-8A38-A1DA1E0C33D9}"
 EndProject
@@ -9,6 +9,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "singer-transform-tests", "s
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{FDBBCB38-9B89-4326-8017-8A6BF8E074A5}"
 	ProjectSection(SolutionItems) = preProject
+		.github\workflows\build-dev.yml = .github\workflows\build-dev.yml
+		.github\workflows\build-tag.yml = .github\workflows\build-tag.yml
 		README.md = README.md
 		transform-configs.md = transform-configs.md
 	EndProjectSection
