@@ -28,7 +28,7 @@ jobs:
     - name: Zip Package Files
       uses: papeloto/action-zip@v1
       with:
-        files: singer-transform/bin/Release/net5.0/
+        files: singer-transform/bin/Release/net6.0/
         dest: singer-transform.zip
     
     - name: Get the version
