@@ -4,6 +4,7 @@ using SingerTransform.Octostache;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Unicode;
 
 namespace SingerTransform
 {
@@ -45,6 +46,9 @@ namespace SingerTransform
                         break;
                     case TransformType.NoTableVersioning:
                         input = HandleNoTableVersioning(input, transform);
+                        break;
+                    case TransformType.EnsureUTF8:
+                        input = HandleEnsureUTF8(input, transform);
                         break;
                 }
             }
@@ -211,6 +215,30 @@ namespace SingerTransform
             {
                 // Remove the versioning from the record messages
                 input.Version = null;
+            }
+
+            return input;
+        }
+
+        private SingerMessage HandleEnsureUTF8(SingerMessage input, TransformConfig transform)
+        {
+            if (input == null)
+                return null;
+
+            if (input.Type == SingerMessageType.RECORD)
+            {
+                if (!input.Record.ContainsKey(transform.TransformProperty))
+                    return input;
+
+                var strVal = input.Record[transform.TransformProperty].ToString();
+                try
+                {
+                    var fixedVal = strVal.Replace("\u0000", "");
+                    input.Record[transform.TransformProperty] = fixedVal;
+                }
+                catch
+                {
+                }
             }
 
             return input;

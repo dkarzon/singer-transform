@@ -31,6 +31,10 @@ namespace SingerTransform.Models
         /// <summary>
         /// Hack to bypass table versioning on full table replication (which requires the table to be dropped and recreated)
         /// </summary>
-        NoTableVersioning
+        NoTableVersioning,
+        /// <summary>
+        /// Make sure the string values passed in are UTF8 encoded
+        /// </summary>
+        EnsureUTF8,
     }
 }
